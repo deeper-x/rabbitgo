@@ -7,11 +7,7 @@ import (
 )
 
 func main() {
-	action := flag.String("action", "sub", "sub for subscribing, pub for publishing")
-	msg := flag.String("msg", "no msg", "input message to publish")
-
-	flag.Parse()
-
+	ia := inputArgs()
 	e := Engine{}
 
 	err := e.Start()
@@ -21,14 +17,12 @@ func main() {
 
 	defer e.Connection.Close()
 
-	switch *action {
+	switch *ia.action {
 
 	case "pub":
-		log.Println("Sending identity")
-		e.Pub(*msg)
+		e.Pub(*ia.msg)
 
 	case "sub":
-		log.Println("Listening...")
 		e.Sub()
 
 	default:
@@ -36,4 +30,16 @@ func main() {
 		os.Exit(1)
 	}
 
+}
+
+func inputArgs() *UserInput {
+	action := flag.String("action", "sub", "sub for subscribing, pub for publishing")
+	msg := flag.String("msg", "no msg", "input message to publish")
+
+	flag.Parse()
+
+	return &UserInput{
+		action: action,
+		msg:    msg,
+	}
 }

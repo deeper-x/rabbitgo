@@ -11,33 +11,10 @@ type Engine struct {
 	Connection *amqp.Connection
 }
 
-// Send message to broker
-func (e Engine) Send(msg string) error {
-	ch, err := e.Connection.Channel()
-	if err != nil {
-		log.Println(err)
-		return err
-	}
-
-	defer ch.Close()
-
-	q, err := ch.QueueDeclare("auth_queue", false, false, false, false, nil)
-	if err != nil {
-		log.Println(err)
-		return err
-	}
-
-	err = ch.Publish("", q.Name, false, false, amqp.Publishing{
-		ContentType: "text/plain",
-		Body:        []byte(msg),
-	})
-
-	if err != nil {
-		log.Println(err)
-		return err
-	}
-
-	return nil
+// UserInput definitions
+type UserInput struct {
+	action *string
+	msg    *string
 }
 
 // Start configure instance connection

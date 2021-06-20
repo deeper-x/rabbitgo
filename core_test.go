@@ -22,7 +22,7 @@ func TestSend(t *testing.T) {
 	}
 	defer e.Connection.Close()
 
-	err = e.Send("demo")
+	err = e.send("demo")
 
 	if err != nil {
 		t.Error(err)
